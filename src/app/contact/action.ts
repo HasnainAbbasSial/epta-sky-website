@@ -26,10 +26,18 @@ export async function sendContactEmail(formData: FormData) {
 
   try {
     const { data, error } = await resend.emails.send({
-      from: 'Epta Sky <noreply@eptasky.com>',
-      to: ['contact@eptasky.com'],
-      subject: `New Lead: ${subject}`,
-      text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
+      from: 'Epta Sky Contact <onboarding@resend.dev>',
+      to: ['delivered@resend.dev'], // Use resend test email initially
+      subject: `New Lead from ${name}: ${subject}`,
+      html: `
+        <h2>New Contact Form Submission</h2>
+        <p><strong>From:</strong> ${name} (${email})</p>
+        <p><strong>Subject:</strong> ${subject}</p>
+        <p><strong>Message:</strong></p>
+        <p>${message.replace(/\n/g, '<br>')}</p>
+        <hr>
+        <p><em>Reply to: ${email}</em></p>
+      `,
       replyTo: email,
     });
 
