@@ -38,6 +38,19 @@ export default defineType({
             description: 'Key results e.g. "Increased traffic by 50%"',
         }),
         defineField({
+            name: 'excerpt',
+            title: 'Excerpt',
+            type: 'text',
+            description: 'Short summary for the case study list',
+        }),
+        defineField({
+            name: 'metaDescription',
+            title: 'Meta Description',
+            type: 'text',
+            description: 'SEO description for search engines',
+            rows: 3,
+        }),
+        defineField({
             name: 'body',
             title: 'Case Study Details',
             type: 'blockContent',

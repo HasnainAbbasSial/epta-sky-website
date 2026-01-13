@@ -17,21 +17,12 @@ export function Hero() {
             </div>
 
             <div className="container mx-auto px-4 relative z-10 text-center">
-                <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, ease: "easeOut" }}
-                >
+                <div className="animate-in fade-in slide-in-from-bottom-4 duration-1000 ease-out">
                     {/* Badge */}
-                    <motion.div
-                        initial={{ scale: 0.9, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        transition={{ delay: 0.2 }}
-                        className="inline-flex items-center space-x-2 bg-white/5 border border-white/10 rounded-full px-4 py-1.5 mb-8 backdrop-blur-sm"
-                    >
+                    <div className="inline-flex items-center space-x-2 bg-white/5 border border-white/10 rounded-full px-4 py-1.5 mb-8 backdrop-blur-sm">
                         <Sparkles className="w-4 h-4 text-cyan-400" />
                         <span className="text-sm font-medium text-slate-300">#1 SEO Agency for Growth</span>
-                    </motion.div>
+                    </div>
 
                     {/* Heading */}
                     <h1 className="text-6xl md:text-8xl font-bold tracking-tighter mb-8 leading-[1.1]">
@@ -52,9 +43,9 @@ export function Hero() {
                             View Our Work
                         </Button>
                     </div>
-                </motion.div>
+                </div>
 
-                {/* Floating Stats / Social Proof */}
+                {/* Floating Stats / Social Proof - Keep motion here as it's below fold or less critical */}
                 <motion.div
                     initial={{ opacity: 0, y: 50 }}
                     animate={{ opacity: 1, y: 0 }}

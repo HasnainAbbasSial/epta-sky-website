@@ -62,6 +62,13 @@ export default defineType({
             type: 'text',
             description: 'Short summary for the blog list',
         }),
+        defineField({
+            name: 'metaDescription',
+            title: 'Meta Description',
+            type: 'text',
+            description: 'SEO description for search engines',
+            rows: 3,
+        }),
     ],
 
     preview: {

@@ -156,7 +156,7 @@ const fallbackServices: Record<string, ServiceData> = {
     }
 }
 
-async function getService(slug: string) {
+export async function getService(slug: string) {
     // Try to fetch from Sanity (if you had this structure there)
     // For now, we are relying on the fallback for this specific layout
     // But we can check if a simple document exists to get the Title/Desc override
@@ -180,6 +180,22 @@ async function getService(slug: string) {
     }
 
     return fallbackServices[slug] || null
+}
+
+export async function generateMetadata(props: { params: Promise<{ slug: string }> }): Promise<import("next").Metadata> {
+    const params = await props.params;
+    const service = await getService(params.slug) as ServiceData | any;
+
+    if (!service) {
+        return {
+            title: "Service Not Found | Epta Sky",
+        }
+    }
+
+    return {
+        title: `${service.title} | Epta Sky`,
+        description: service.description || `Expert ${service.title} services from Epta Sky.`,
+    }
 }
 
 export default async function ServicePage(props: { params: Promise<{ slug: string }> }) {

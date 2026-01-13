@@ -14,13 +14,31 @@ async function getPost(slug: string) {
     mainImage,
     publishedAt,
     body,
-    "author": author->{name, image, bio}
+    "author": author->{name, image, bio},
+    excerpt,
+    metaDescription
   }`
     try {
         return await client.fetch(query, { slug, decodedSlug })
     } catch (error) {
         console.warn(`Failed to fetch post ${slug}:`, error)
         return null
+    }
+}
+
+export async function generateMetadata(props: { params: Promise<{ slug: string }> }): Promise<import("next").Metadata> {
+    const params = await props.params;
+    const post = await getPost(params.slug)
+
+    if (!post) {
+        return {
+            title: "Post Not Found",
+        }
+    }
+
+    return {
+        title: `${post.title} | Epta Sky`,
+        description: post.metaDescription || post.excerpt || "Read our latest blog post on Epta Sky.",
     }
 }
 

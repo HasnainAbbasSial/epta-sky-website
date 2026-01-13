@@ -7,6 +7,11 @@ import Image from 'next/image'
 
 import { client } from '@/sanity/lib/client'
 
+export const metadata = {
+  title: "Epta Sky | Premium SEO & Digital Growth Agency",
+  description: "Epta Sky is a global SEO leader providing data-driven strategies, technical SEO audits, and premium link building to build digital empires.",
+}
+
 async function getServices() {
   const query = `*[_type == "service"] {
     title,
@@ -87,6 +92,7 @@ export default async function Home() {
                 alt="Building Empires"
                 fill
                 className="object-cover"
+                sizes="(max-width: 768px) 100vw, 50vw"
               />
             </div>
           </div>

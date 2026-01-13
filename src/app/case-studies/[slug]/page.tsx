@@ -16,6 +16,7 @@ async function getCaseStudy(slug: string) {
     mainImage,
     results,
     excerpt,
+    metaDescription,
     body,
     publishedAt
   }`
@@ -24,6 +25,22 @@ async function getCaseStudy(slug: string) {
     } catch (error) {
         console.warn(`Failed to fetch case study ${slug}:`, error)
         return null
+    }
+}
+
+export async function generateMetadata(props: { params: Promise<{ slug: string }> }): Promise<import("next").Metadata> {
+    const params = await props.params;
+    const caseStudy = await getCaseStudy(params.slug)
+
+    if (!caseStudy) {
+        return {
+            title: "Case Study Not Found",
+        }
+    }
+
+    return {
+        title: `${caseStudy.title} | Epta Sky Case Study`,
+        description: caseStudy.metaDescription || caseStudy.excerpt || "Deep dive into our SEO success story.",
     }
 }
 
