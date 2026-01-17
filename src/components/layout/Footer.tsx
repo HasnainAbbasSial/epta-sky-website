@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Facebook, Linkedin, Mail, Phone, MapPin } from 'lucide-react'
+import { Facebook, Linkedin, Mail, Phone, MapPin, MessageCircle } from 'lucide-react'
 
 export function Footer() {
     const currentYear = new Date().getFullYear()
@@ -15,7 +15,7 @@ export function Footer() {
                             We help businesses grow through data-driven SEO strategies and modern web solutions. Your success is our mission.
                         </p>
                         <div className="flex space-x-4">
-                            <Link href="https://www.linkedin.com/in/hasnain-abbas-eptasky/" target="_blank" className="hover:text-primary transition-colors">
+                            <Link href="https://www.linkedin.com/company/epta-sky/" target="_blank" className="hover:text-primary transition-colors">
                                 <Linkedin className="h-5 w-5" />
                                 <span className="sr-only">LinkedIn</span>
                             </Link>
@@ -67,8 +67,8 @@ export function Footer() {
                                 <span>contact@eptasky.com</span>
                             </li>
                             <li className="flex items-start space-x-3">
-                                <Phone className="h-5 w-5 text-primary shrink-0" />
-                                <span>+92 3070467687</span>
+                                <MessageCircle className="h-5 w-5 text-primary shrink-0" />
+                                <span>+92 3070467687 (WhatsApp)</span>
                             </li>
                             <li className="flex items-start space-x-3">
                                 <MapPin className="h-5 w-5 text-primary shrink-0" />
