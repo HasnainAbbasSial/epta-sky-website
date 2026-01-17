@@ -1,5 +1,5 @@
 import { ContactForm } from '@/components/contact/ContactForm'
-import { Mail, Phone, MapPin } from 'lucide-react'
+import { Mail, Phone, MapPin, MessageCircle } from 'lucide-react'
 
 export const metadata = {
     title: 'Contact Us | Epta Sky',
@@ -34,10 +34,10 @@ export default function ContactPage() {
                                 </li>
                                 <li className="flex items-start space-x-4">
                                     <div className="p-3 bg-primary/10 rounded-lg text-primary">
-                                        <Phone className="h-6 w-6" />
+                                        <MessageCircle className="h-6 w-6" />
                                     </div>
                                     <div>
-                                        <p className="font-medium text-sm text-muted-foreground">Phone</p>
+                                        <p className="font-medium text-sm text-muted-foreground">WhatsApp</p>
                                         <p className="font-semibold">+92 3070467687</p>
                                     </div>
                                 </li>
@@ -58,7 +58,7 @@ export default function ContactPage() {
                             <h2 className="text-xl font-bold mb-6">Follow Us</h2>
                             <div className="grid grid-cols-2 gap-4">
                                 <a
-                                    href="https://www.linkedin.com/in/hasnain-abbas-eptasky/"
+                                    href="https://www.linkedin.com/company/epta-sky/"
                                     target="_blank" rel="noopener noreferrer"
                                     className="flex items-center space-x-3 p-3 rounded-xl bg-card border border-border hover:border-primary transition-colors group"
                                 >
