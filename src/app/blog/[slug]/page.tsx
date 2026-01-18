@@ -69,8 +69,15 @@ export default async function BlogPost(props: { params: Promise<{ slug: string }
         notFound()
     }
 
-    // Simple TOC extraction (if enabled)
-    // Note: detailed TOC usually requires parsing blocks. For now we will assume blocks have style 'h2' or 'h3'
+    // Slugify helper for anchor IDs
+    const slugify = (text: string) =>
+        text
+            .toLowerCase()
+            .replace(/[^\w\s-]/g, '')
+            .replace(/[\s_-]+/g, '-')
+            .replace(/^-+|-+$/g, '');
+
+    // Simple TOC extraction
     const headings = post.enableTOC ? post.body.filter((block: any) => block.style === 'h2' || block.style === 'h3') : []
 
     return (
@@ -108,12 +115,12 @@ export default async function BlogPost(props: { params: Promise<{ slug: string }
                 </div>
             </div>
 
-            {/* AI Summary Button & Modal implementation using <details> for no-js simplicity */}
+            {/* AI Summary Button */}
             {post.aiSummary && (
                 <div className="flex justify-center mb-12">
-                    <details className="group relative">
+                    <details className="group relative transition-all duration-300">
                         <summary className="list-none cursor-pointer">
-                            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-6 py-3 rounded-full font-medium transition-all shadow-lg hover:shadow-purple-500/25">
+                            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-6 py-3 rounded-full font-medium transition-all shadow-lg hover:shadow-purple-500/25 active:scale-95">
                                 <Bot className="w-5 h-5" />
                                 Get AI Summary
                             </div>
@@ -129,8 +136,6 @@ export default async function BlogPost(props: { params: Promise<{ slug: string }
                                 </div>
                             </div>
                         </div>
-                        {/* Overlay to close when clicking outside logic would require JS, but this is a pure CSS 'popup' 
-                            Use a full screen invisible overlay if needed, but for now specific click to close or click summary again works */}
                     </details>
                 </div>
             )}
@@ -166,23 +171,34 @@ export default async function BlogPost(props: { params: Promise<{ slug: string }
 
             {/* Table of Contents */}
             {post.enableTOC && headings.length > 0 && (
-                <div className="bg-slate-900/50 border border-white/5 rounded-2xl p-8 mb-12">
-                    <h3 className="text-lg font-bold mb-4 flex items-center gap-2 text-white">
-                        <List className="w-5 h-5 text-slate-400" /> Table of Contents
-                    </h3>
-                    <nav className="space-y-2">
+                <details open className="bg-slate-900/50 border border-white/5 rounded-2xl mb-12 group overflow-hidden transition-all duration-300">
+                    <summary className="list-none cursor-pointer p-6 flex items-center justify-between hover:bg-white/5">
+                        <div className="flex items-center gap-2">
+                            <List className="w-5 h-5 text-primary" />
+                            <h3 className="text-lg font-bold text-white">Table of Contents</h3>
+                        </div>
+                        <div className="text-slate-500 group-open:rotate-180 transition-transform duration-300">
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </div>
+                    </summary>
+                    <nav className="p-6 pt-0 space-y-3 border-t border-white/5 mt-4 pt-4">
                         {headings.map((block: any, idx: number) => {
-                            // Simple anchor generation (requires slugifying text in real app, relying on portable text implementation for IDs or manual)
-                            // For now validation/display only
                             const text = block.children?.map((c: any) => c.text).join('')
+                            const id = slugify(text)
                             return (
-                                <div key={block._key || idx} className={`${block.style === 'h3' ? 'pl-4' : ''} text-slate-400 hover:text-white transition-colors cursor-pointer text-sm`}>
+                                <a
+                                    key={block._key || idx}
+                                    href={`#${id}`}
+                                    className={`block transition-all hover:translate-x-1 ${block.style === 'h3' ? 'pl-6 text-sm' : 'text-base font-medium'} text-slate-400 hover:text-primary active:text-primary-foreground`}
+                                >
                                     {text}
-                                </div>
+                                </a>
                             )
                         })}
                     </nav>
-                </div>
+                </details>
             )}
 
             <div className="prose prose-invert prose-headings:font-bold prose-h1:text-4xl prose-h2:text-3xl prose-h3:text-2xl prose-p:text-slate-300 max-w-none">
@@ -212,9 +228,15 @@ export default async function BlogPost(props: { params: Promise<{ slug: string }
                             },
                         },
                         block: {
-                            h1: ({ children }: any) => <h1 className="text-4xl md:text-5xl font-bold mt-16 mb-8 text-white leading-tight">{children}</h1>,
-                            h2: ({ children }: any) => <h2 className="text-3xl md:text-4xl font-bold mt-12 mb-6 text-white leading-snug">{children}</h2>,
-                            h3: ({ children }: any) => <h3 className="text-2xl font-bold mt-10 mb-4 text-white underline decoration-primary/30 decoration-4 underline-offset-8">{children}</h3>,
+                            h1: ({ children }: any) => <h1 id={slugify(children[0]?.props?.text || children[0] || '')} className="text-4xl md:text-5xl font-bold mt-16 mb-8 text-white leading-tight">{children}</h1>,
+                            h2: ({ children }: any) => {
+                                const id = slugify(children[0]?.props?.text || children[0] || '')
+                                return <h2 id={id} className="text-3xl md:text-4xl font-bold mt-12 mb-6 text-white leading-snug scroll-mt-24">{children}</h2>
+                            },
+                            h3: ({ children }: any) => {
+                                const id = slugify(children[0]?.props?.text || children[0] || '')
+                                return <h3 id={id} className="text-2xl font-bold mt-10 mb-4 text-white underline decoration-primary/30 decoration-4 underline-offset-8 scroll-mt-24">{children}</h3>
+                            },
                             h4: ({ children }: any) => <h4 className="text-xl font-bold mt-8 mb-4 text-slate-100">{children}</h4>,
                             normal: ({ children }: any) => <p className="text-slate-300 text-lg leading-relaxed mb-8">{children}</p>,
                             blockquote: ({ children }: any) => (
